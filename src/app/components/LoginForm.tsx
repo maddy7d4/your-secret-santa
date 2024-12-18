@@ -6,9 +6,11 @@ import { useRouter } from 'next/navigation';
 export default function LoginForm() {
     const [userId, setUserId] = useState('');
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
         const response = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -17,8 +19,10 @@ export default function LoginForm() {
 
         if (response.ok) {
             router.push('/chat');
+            setLoading(false);
         } else {
             alert('Login failed');
+            setLoading(false)
         }
     };
 
@@ -26,7 +30,7 @@ export default function LoginForm() {
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
             <div>
                 <label htmlFor="userId" className="sr-only">
-                    User ID
+                    Unique ID
                 </label>
                 <input
                     id="userId"
@@ -45,7 +49,7 @@ export default function LoginForm() {
                     type="submit"
                     className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                 >
-                    Sign in
+                    {loading ? 'Loading...' : 'Talk Now'}
                 </button>
             </div>
         </form>
