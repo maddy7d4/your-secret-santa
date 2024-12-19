@@ -49,8 +49,15 @@ export class DB {
             { id: 'santa1', name: 'Santa 1', role: 'santa' as 'santa', partnerId: 'child1' },
             { id: 'santa2', name: 'Santa 2', role: 'santa' as 'santa', partnerId: 'child2' },
             { id: 'child1', name: 'Child 1', role: 'child' as 'child', partnerId: 'santa1' },
-            { id: 'child2', name: 'Child 2', role: 'child' as 'child', partnerId: 'santa2' }
+            { id: 'child2', name: 'Child 2', role: 'child' as 'child', partnerId: 'santa2' },
+            { id: 'santa3', name: 'Santa 3', role: 'santa' as 'santa', partnerId: 'child3' },
+            { id: 'santa4', name: 'Santa 4', role: 'santa' as 'santa', partnerId: 'child4' },
+            { id: 'child3', name: 'Child 3', role: 'child' as 'child', partnerId: 'santa3' },
+            { id: 'child4', name: 'Child 4', role: 'child' as 'child', partnerId: 'santa4' },
+            { id: 'santa5', name: 'Santa 5', role: 'santa' as 'santa', partnerId: 'child5' },
+            { id: 'child5', name: 'Child 5', role: 'child' as 'child', partnerId: 'santa5' }
         ];
+
 
         for (const user of users) {
             await db.collection<User>('users').updateOne(
