@@ -23,7 +23,7 @@ export default async function ChatPage() {
                 <h1 className="text-3xl font-bold text-red-600 mb-4 text-center">
                     Welcome, {user.role === 'santa' ? 'Santa' : 'Child'}!
                 </h1>
-                <ChatInterface userId={userId} />
+                <ChatInterface userId={userId} user={user} />
             </div>
         </div>
     );
