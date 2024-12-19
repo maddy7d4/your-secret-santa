@@ -10,7 +10,7 @@ type Message = {
     timestamp: number;
 };
 
-export default function ChatInterface({ userId }: { userId: string }) {
+export default async function ChatInterface({ userId }: { userId: string }) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
