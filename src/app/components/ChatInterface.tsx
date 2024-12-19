@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { db } from '@/lib/db';
 
 type Message = {
     id: string;
@@ -10,7 +9,7 @@ type Message = {
     timestamp: number;
 };
 
-export default async function ChatInterface({ userId }: { userId: string }) {
+export default function ChatInterface({ userId, user }: { userId: string, user: any }) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +17,6 @@ export default async function ChatInterface({ userId }: { userId: string }) {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const [isUserAtBottom, setIsUserAtBottom] = useState(true);
-    const user = await db.getUser(userId);
 
 
 
