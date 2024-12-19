@@ -112,7 +112,7 @@ export default function ChatInterface({ userId }: { userId: string }) {
     return (
         <div className="bg-white shadow-xl rounded-lg overflow-hidden flex flex-col h-[80vh]">
             <div className="p-4 border-b bg-red-500 text-white flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Secret Santa Chat</h2>
+                <h2 className="text-xl font-semibold">Secret Santa Chat - {user.role === 'santa' ? 'Santa' : 'Child'}</h2>
                 <button
                     onClick={handleLogout}
                     className="px-4 py-2 bg-white text-red-500 rounded hover:bg-red-100 transition-colors"
