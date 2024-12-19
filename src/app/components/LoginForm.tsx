@@ -15,7 +15,7 @@ export default function LoginForm() {
         const response = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: userId.toLowerCase() })
+            body: JSON.stringify({ userId: userId.toLowerCase().trim() })
         });
 
         if (response.ok) {
