@@ -123,13 +123,13 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                     <p className="text-center text-gray-500">No messages yet. Start chatting!</p>
                 ) : (
                     messages.map((message) => (
-                        <div className="flex flex-col gap-2 px-4">
+                        <div className="flex flex-col gap-2 px-2">
                             <div
                                 key={message.id} // Ensure you use a unique identifier
                                 className={`p-3 rounded-lg ${message.senderId === userId
-                                    ? 'bg-red-100 text-red-800 ml-auto' // Align to the right for sender messages
-                                    : 'bg-green-100 text-green-800 mr-auto' // Align to the left for receiver messages
-                                    } max-w-[70%] sm:max-w-[60%] md:max-w-[50%]`}
+                                    ? 'bg-red-100 text-red-800 ml-auto' // Sender's messages align to the right
+                                    : 'bg-green-100 text-green-800 mr-auto' // Receiver's messages align to the left
+                                    } sm:max-w-[70%] max-w-full`}
                             >
                                 <p>{message.content}</p>
                                 <p className="text-xs text-gray-500 mt-1">
@@ -137,7 +137,6 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                                 </p>
                             </div>
                         </div>
-
                     ))
                 )}
                 <div ref={messagesEndRef} />
