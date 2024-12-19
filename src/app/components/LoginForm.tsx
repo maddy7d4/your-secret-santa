@@ -19,11 +19,11 @@ export default function LoginForm() {
 
         if (response.ok) {
             router.push('/chat');
-            setLoading(false);
         } else {
             alert('Login failed');
-            setLoading(false)
         }
+        setLoading(false);
+    
     };
 
     return (
