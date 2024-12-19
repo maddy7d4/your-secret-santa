@@ -129,7 +129,7 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                                 className={`p-3 rounded-lg ${message.senderId === userId
                                     ? 'bg-red-100 text-red-800 ml-auto' // Sender's messages align to the right
                                     : 'bg-green-100 text-green-800 mr-auto' // Receiver's messages align to the left
-                                    } sm:max-w-[70%] max-w-full`}
+                                    } sm:max-w-[70%] max-w-full break-words whitespace-normal`}
                             >
                                 <p>{message.content}</p>
                                 <p className="text-xs text-gray-500 mt-1">
@@ -137,6 +137,7 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                                 </p>
                             </div>
                         </div>
+
                     ))
                 )}
                 <div ref={messagesEndRef} />
