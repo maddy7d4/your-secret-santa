@@ -85,6 +85,9 @@ export default function ChatInterface({ userId }: { userId: string }) {
             });
 
             if (response.ok) {
+                if(!isUserAtBottom){
+                    scrollToBottom()
+                }
                 setNewMessage(''); // Clear the message input
                 await fetchMessages();  // Re-fetch messages to include the new one
             } else {
