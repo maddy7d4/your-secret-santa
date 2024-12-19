@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { db } from '@/lib/db';
 
 type Message = {
     id: string;
