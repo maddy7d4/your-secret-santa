@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 type Message = {
     id: string;
@@ -105,12 +106,13 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
     const handleLogout = async () => {
         await fetch('/api/logout', { method: 'POST' });
         router.push('/');
+        toast.success('Logout successful');
     };
 
     return (
         <div className="bg-white shadow-xl rounded-lg overflow-hidden flex flex-col h-[80vh]">
             <div className="p-4 border-b bg-red-500 text-white flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Secret Santa Chat - {user.role === 'santa' ? 'Santa' : 'Child'}</h2>
+                <h2 className="text-xl font-semibold">Secret Santa Chat - {user === 'santa' ? 'Santa' : 'Child'}</h2>
                 <button
                     onClick={handleLogout}
                     className="px-4 py-2 bg-white text-red-500 rounded hover:bg-red-100 transition-colors"
@@ -125,7 +127,7 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                     messages.map((message) => (
                         <div className="flex flex-col gap-2 px-2">
                             <div
-                                key={message.id} // Ensure you use a unique identifier
+                                key={Math.random()} // Ensure you use a unique identifier
                                 className={`p-3 rounded-lg ${message.senderId === userId
                                     ? 'bg-red-100 text-red-800 ml-auto' // Sender's messages align to the right
                                     : 'bg-green-100 text-green-800 mr-auto' // Receiver's messages align to the left

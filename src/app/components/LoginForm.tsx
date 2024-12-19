@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function LoginForm() {
     const [userId, setUserId] = useState('');
@@ -19,15 +20,20 @@ export default function LoginForm() {
 
         if (response.ok) {
             router.push('/chat');
+            toast.success('Login successful');
         } else {
-            alert('Login failed');
+            // alert('Login failed');
+            toast.error('Login failed');
         }
         setLoading(false);
     
     };
 
     return (
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6 relative">
+            <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50 backdrop-blur-md" style={{display: loading ? 'flex' : 'none'}}>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-4 border-red-500"></div>
+            </div>
             <div>
                 <label htmlFor="userId" className="sr-only">
                     Unique ID
@@ -41,6 +47,7 @@ export default function LoginForm() {
                     placeholder="User ID"
                     value={userId}
                     onChange={(e) => setUserId(e.target.value)}
+                    disabled={loading}
                 />
             </div>
 
@@ -48,6 +55,7 @@ export default function LoginForm() {
                 <button
                     type="submit"
                     className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    disabled={loading}
                 >
                     {loading ? 'Loading...' : 'Talk Now'}
                 </button>

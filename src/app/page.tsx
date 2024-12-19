@@ -1,3 +1,4 @@
+import Footer from './components/Footer';
 import LoginForm from './components/LoginForm';
 import { db } from '@/lib/db';
 
@@ -20,6 +21,7 @@ export default async function Home() {
           </p>
         </div>
         <LoginForm />
+      <Footer /> 
       </div>
     </div>
   );
