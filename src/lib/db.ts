@@ -46,16 +46,16 @@ export class DB {
     async initializeUsers(): Promise<void> {
         const db = await getDb();
         const users = [
-            { id: 'santa1', name: 'Santa 1', role: 'santa' as 'santa', partnerId: 'child1' },
-            { id: 'santa2', name: 'Santa 2', role: 'santa' as 'santa', partnerId: 'child2' },
-            { id: 'child1', name: 'Child 1', role: 'child' as 'child', partnerId: 'santa1' },
-            { id: 'child2', name: 'Child 2', role: 'child' as 'child', partnerId: 'santa2' },
-            { id: 'santa3', name: 'Santa 3', role: 'santa' as 'santa', partnerId: 'child3' },
-            { id: 'santa4', name: 'Santa 4', role: 'santa' as 'santa', partnerId: 'child4' },
-            { id: 'child3', name: 'Child 3', role: 'child' as 'child', partnerId: 'santa3' },
-            { id: 'child4', name: 'Child 4', role: 'child' as 'child', partnerId: 'santa4' },
-            { id: 'santa5', name: 'Santa 5', role: 'santa' as 'santa', partnerId: 'child5' },
-            { id: 'child5', name: 'Child 5', role: 'child' as 'child', partnerId: 'santa5' }
+            { id: 'd78ya-child', name: 'Child', role: 'child' as 'child', partnerId: 'rak1h5th-santa' },
+            { id: 'd78ya-santa', name: 'Santa', role: 'santa' as 'santa', partnerId: 'giripra8at9-child' },
+            { id: 'giripra8at9-child', name: 'Child', role: 'child' as 'child', partnerId: 'd78ya-santa' },
+            { id: 'giripra8at9-santa', name: 'Santa', role: 'santa' as 'santa', partnerId: 'm8d3avan-child' },
+            { id: 'm8d3avan-child', name: 'Child', role: 'child' as 'child', partnerId: 'giripra8at9-santa' },
+            { id: 'm8d3avan-santa', name: 'Santa', role: 'santa' as 'santa', partnerId: '25asad-child' },
+            { id: '25asad-child', name: 'Child', role: 'child' as 'child', partnerId: 'm8d3avan-santa' },
+            { id: '25asad-santa', name: 'Santa', role: 'santa' as 'santa', partnerId: 'rak1h5th-child' },
+            { id: 'rak1h5th-child', name: 'Child', role: 'child' as 'child', partnerId: '25asad-santa' },
+            { id: 'rak1h5th-santa', name: 'Santa', role: 'santa' as 'santa', partnerId: 'd78ya-child' },
         ];
 
 
