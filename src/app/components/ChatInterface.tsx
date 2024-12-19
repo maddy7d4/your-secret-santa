@@ -18,6 +18,10 @@ export default function ChatInterface({ userId }: { userId: string }) {
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const [isUserAtBottom, setIsUserAtBottom] = useState(true);
 
+    const cookieStore = await cookies();
+    const userId = cookieStore.get('userId')?.value;
+
+
     // Scroll to the bottom of the chat when new messages are added
     useEffect(() => {
         fetchMessages();
