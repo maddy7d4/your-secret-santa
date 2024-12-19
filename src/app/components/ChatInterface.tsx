@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { cookies } from 'next/headers';
 
 type Message = {
     id: string;
