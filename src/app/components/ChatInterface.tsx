@@ -123,18 +123,21 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                     <p className="text-center text-gray-500">No messages yet. Start chatting!</p>
                 ) : (
                     messages.map((message) => (
-                        <div
-                            key={Math.random()} // Use message.id for unique key
-                            className={`p-3 rounded-lg ${message.senderId === userId
-                                ? 'bg-red-100 text-red-800 ml-auto'
-                                : 'bg-green-100 text-green-800'
-                                } max-w-xs`}
-                        >
-                            <p>{message.content}</p>
-                            <p className="text-xs text-gray-500 mt-1">
-                                {new Date(message.timestamp).toLocaleTimeString()}
-                            </p>
+                        <div className="flex flex-col gap-2 px-4">
+                            <div
+                                key={message.id} // Ensure you use a unique identifier
+                                className={`p-3 rounded-lg ${message.senderId === userId
+                                    ? 'bg-red-100 text-red-800 ml-auto' // Align to the right for sender messages
+                                    : 'bg-green-100 text-green-800 mr-auto' // Align to the left for receiver messages
+                                    } max-w-[70%] sm:max-w-[60%] md:max-w-[50%]`}
+                            >
+                                <p>{message.content}</p>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    {new Date(message.timestamp).toLocaleTimeString()}
+                                </p>
+                            </div>
                         </div>
+
                     ))
                 )}
                 <div ref={messagesEndRef} />
