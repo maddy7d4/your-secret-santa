@@ -16,6 +16,7 @@ export default function ChatInterface({ userId }: { userId: string }) {
     const router = useRouter();
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
+    const [isUserAtBottom, setIsUserAtBottom] = useState(true);
 
     // Scroll to the bottom of the chat when new messages are added
     useEffect(() => {
@@ -25,18 +26,37 @@ export default function ChatInterface({ userId }: { userId: string }) {
     }, []);
 
     useEffect(() => {
-        // Scroll to the bottom when messages change (after they are fetched or sent)
-        if (messagesEndRef.current) {
+        if (isUserAtBottom && messagesEndRef.current) {
             scrollToBottom();
         }
     }, [messages]);
 
-    const scrollToBottom = () => {
-        if (messagesEndRef.current) {
-            // Smooth scroll to the bottom of the chat
-            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        useEffect(() => {
+        const handleScroll = () => {
+            if (chatContainerRef.current) {
+                const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+                // Check if user is near the bottom (e.g., within 10px)
+                setIsUserAtBottom(scrollHeight - scrollTop - clientHeight <= 10);
+            }
+        };
+    
+        const chatContainer = chatContainerRef.current;
+        if (chatContainer) {
+            chatContainer.addEventListener('scroll', handleScroll);
         }
-    };
+    
+        return () => {
+            if (chatContainer) {
+                chatContainer.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, []);
+
+        const scrollToBottom = () => {
+            if (messagesEndRef.current) {
+                messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
 
     const fetchMessages = async () => {
         try {
