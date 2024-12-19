@@ -17,6 +17,7 @@ export default function ChatInterface({ userId }: { userId: string }) {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const [isUserAtBottom, setIsUserAtBottom] = useState(true);
+    const user = await db.getUser(userId);
 
 
 
