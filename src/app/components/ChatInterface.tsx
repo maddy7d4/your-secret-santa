@@ -70,8 +70,17 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
             const response = await fetch('/api/messages');
             if (response.ok) {
                 const data = await response.json();
-                const decoded = data.map((message: any) => ({ ...message, senderId: decrypt(message.senderId) ,receiverId: decrypt(message.receiverId) }));
-                data.receiverId = decoded;
+                // const decodedReceiver = data.map((message: any) => ({ ...message, receiverId: decrypt(message.receiverId) }));
+                // const decodedSender =  data.map((message: any) => ({ ...message, senderId: decrypt(message.senderId) }));
+                // data.receiverId = decodedReceiver.receiverId;
+                // data.senderId  = decodedSender.senderId;
+                // console.log("data ----->",data)
+                // console.log("data ----->", decodedReceiver)
+
+                data.forEach((message: any) => {
+                    message.receiverId = decrypt(message.receiverId);
+                    message.senderId = decrypt(message.senderId);
+                })
                 setMessages(data);
             } else {
                 console.error('Failed to fetch messages');
@@ -80,7 +89,7 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
             console.error('Error fetching messages:', error);
         }
     };
-
+    
     const encrypt = (text: string) => {
         const encoded = btoa(text);
         return encoded;
@@ -97,7 +106,7 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ content: newMessage, key: encrypt(user.receiverId) }),
             });
-
+            
             if (response.ok) {
                 if (!isUserAtBottom) {
                     scrollToBottom();
@@ -119,12 +128,13 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
         router.push('/');
         toast.success('Logout successful');
     };
-
+    
     const handleEmojiClick = (emojiObject: { emoji: string }) => {
         setNewMessage(prevMessage => prevMessage + emojiObject.emoji);
         setShowEmojiPicker(false);
         inputRef.current?.focus();
     };
+    console.log("messages ----->", messages)
 
     return (
         <div className="bg-white shadow-xl rounded-lg overflow-hidden flex flex-col h-[80vh]">
