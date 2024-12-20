@@ -164,12 +164,12 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                         disabled={isLoading}
                         ref={inputRef}
                     />
-                    <button
+{/*                     <button
                         type="button"
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                         className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
                     >
-                        😊
+                        😊 */}
                     </button>
                     <button
                         type="submit"
