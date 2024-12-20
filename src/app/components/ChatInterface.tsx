@@ -22,9 +22,6 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
-
-
-    // Scroll to the bottom of the chat when new messages are added
     useEffect(() => {
         fetchMessages();
         const interval = setInterval(fetchMessages, 3000);
@@ -37,20 +34,19 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
         }
     }, [messages]);
 
-        useEffect(() => {
+    useEffect(() => {
         const handleScroll = () => {
             if (chatContainerRef.current) {
                 const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-                // Check if user is near the bottom (e.g., within 10px)
                 setIsUserAtBottom(scrollHeight - scrollTop - clientHeight <= 10);
             }
         };
-    
+
         const chatContainer = chatContainerRef.current;
         if (chatContainer) {
             chatContainer.addEventListener('scroll', handleScroll);
         }
-    
+
         return () => {
             if (chatContainer) {
                 chatContainer.removeEventListener('scroll', handleScroll);
@@ -58,18 +54,25 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
         };
     }, []);
 
-        const scrollToBottom = () => {
-            if (messagesEndRef.current) {
-                messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-            }
-        };
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    const decrypt = (encodedText: string) => {
+        const decoded = atob(encodedText);
+        return decoded;
+        }
 
     const fetchMessages = async () => {
         try {
             const response = await fetch('/api/messages');
             if (response.ok) {
                 const data = await response.json();
-                setMessages(data); // Assuming messages are returned in reverse order
+                const decoded = data.map((message: any) => ({ ...message, receiverId: decrypt(message.receiverId) }));
+                data.receiverId = decoded;
+                setMessages(data);
             } else {
                 console.error('Failed to fetch messages');
             }
@@ -77,7 +80,12 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
             console.error('Error fetching messages:', error);
         }
     };
-    
+
+    const encrypt = (text: string) => {
+        const encoded = btoa(text);
+        return encoded;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!newMessage.trim() || isLoading) return;
@@ -87,15 +95,15 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
             const response = await fetch('/api/messages', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: newMessage }),
+                body: JSON.stringify({ content: newMessage, key: encrypt(user.receiverId) }),
             });
 
             if (response.ok) {
-                if(!isUserAtBottom){
-                    scrollToBottom()
+                if (!isUserAtBottom) {
+                    scrollToBottom();
                 }
-                setNewMessage(''); // Clear the message input
-                await fetchMessages();  // Re-fetch messages to include the new one
+                setNewMessage('');
+                await fetchMessages();
             } else {
                 console.error('Failed to send message');
             }
@@ -134,12 +142,11 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                     <p className="text-center text-gray-500">No messages yet. Start chatting!</p>
                 ) : (
                     messages.map((message) => (
-                        <div className="flex flex-col gap-2 px-2">
+                        <div className="flex flex-col gap-2 px-2" key={message.id}>
                             <div
-                                key={Math.random()} // Ensure you use a unique identifier
                                 className={`p-3 rounded-lg ${message.senderId === userId
-                                    ? 'bg-red-100 text-red-800 ml-auto' // Sender's messages align to the right
-                                    : 'bg-green-100 text-green-800 mr-auto' // Receiver's messages align to the left
+                                    ? 'bg-red-100 text-red-800 ml-auto'
+                                    : 'bg-green-100 text-green-800 mr-auto'
                                     } sm:max-w-[70%] max-w-full break-words whitespace-normal`}
                             >
                                 <p>{message.content}</p>
@@ -148,7 +155,6 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                                 </p>
                             </div>
                         </div>
-
                     ))
                 )}
                 <div ref={messagesEndRef} />
@@ -164,13 +170,6 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                         disabled={isLoading}
                         ref={inputRef}
                     />
-{/*                     <button
-                        type="button"
-                        onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                        className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
-                    >
-                        😊
-                    </button> */}
                     <button
                         type="submit"
                         className={`px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -188,3 +187,4 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
         </div>
     );
 }
+

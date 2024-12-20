@@ -2,6 +2,12 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { db } from '@/lib/db';
 
+
+const encrypt = (text: string) => {
+    const encoded = btoa(text);
+    return encoded;
+};
+
 export async function GET() {
     const cookieStore = await cookies();
     const userId = cookieStore.get('userId')?.value;
@@ -17,6 +23,7 @@ export async function GET() {
         }
 
         const messages = await db.getMessages(userId, user.partnerId);
+        messages.forEach((message) => (message.receiverId = encrypt(message.receiverId)));
         return NextResponse.json(messages.reverse());
     } catch (error) {
         console.error('Error fetching messages:', error);
@@ -53,6 +60,7 @@ export async function POST(request: Request) {
         };
 
         await db.addMessage(message); // Ensure db.addMessage is async
+        message.receiverId = encrypt(message.receiverId);
         return NextResponse.json({ success: true, message });
     } catch (error) {
         console.error('Error processing message:', error);
