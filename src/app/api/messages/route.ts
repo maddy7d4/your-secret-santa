@@ -1,4 +1,4 @@
-import { getDb } from './mongodb';
+import { getDb } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
 export type User = {
