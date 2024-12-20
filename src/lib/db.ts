@@ -57,12 +57,12 @@ export class DB {
     async initializeUsers(): Promise<void> {
         const db = await getDb();
         const users = [
-            { id: 'ra1s5ith-santa', name: 'Child', role: 'child' as 'child', partnerId: '7ivy8-child' },
-            { id: 'ra1s5ith-child', name: 'Santa', role: 'santa' as 'santa', partnerId: '8ad3avan-santa' },
-            { id: '7ivy8-santa', name: 'Child', role: 'child' as 'child', partnerId: '8ad3avan-child' },
-            { id: '7ivy8-child', name: 'Santa', role: 'santa' as 'santa', partnerId: 'ra1s5ith-santa' },
-            { id: '8ad3avan-santa', name: 'Child', role: 'child' as 'child', partnerId: 'ra1s5ith-child' },
-            { id: '8ad3avan-child', name: 'Santa', role: 'santa' as 'santa', partnerId: '7ivy8-santa' },
+            { id: 'raks1i5h_2', name: 'Child', role: 'child' as 'child', partnerId: 'd78ya_1' },
+            { id: 'raks1i5h_1', name: 'Santa', role: 'santa' as 'santa', partnerId: 'm8dha3an_2' },
+            { id: 'd78ya_2', name: 'Child', role: 'child' as 'child', partnerId: 'm8dha3an_1' },
+            { id: 'd78ya_1', name: 'Santa', role: 'santa' as 'santa', partnerId: 'raks1i5h_2' },
+            { id: 'm8dha3an_2', name: 'Child', role: 'child' as 'child', partnerId: 'raks1i5h_1' },
+            { id: 'm8dha3an_1', name: 'Santa', role: 'santa' as 'santa', partnerId: 'd78ya_2' },
         ];
 
 
