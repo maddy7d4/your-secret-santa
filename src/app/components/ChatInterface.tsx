@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import EmojiPicker from 'emoji-picker-react';
 
 type Message = {
     id: string;
@@ -18,7 +19,8 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const [isUserAtBottom, setIsUserAtBottom] = useState(true);
-    const [hasNewMessages, setHasNewMessages] = useState(false);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
 
 
 
@@ -75,21 +77,7 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
             console.error('Error fetching messages:', error);
         }
     };
-    useEffect(() => {
-        const eventSource = new EventSource('/api/sse');
-
-        eventSource.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data.type === 'newMessage' && data.receiverId === userId) {
-                setHasNewMessages(true);
-                fetchMessages();
-            }
-        };
-
-        return () => {
-            eventSource.close();
-        };
-    }, [userId, fetchMessages]);
+    
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!newMessage.trim() || isLoading) return;
@@ -122,6 +110,12 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
         await fetch('/api/logout', { method: 'POST' });
         router.push('/');
         toast.success('Logout successful');
+    };
+
+    const handleEmojiClick = (emojiObject: { emoji: string }) => {
+        setNewMessage(prevMessage => prevMessage + emojiObject.emoji);
+        setShowEmojiPicker(false);
+        inputRef.current?.focus();
     };
 
     return (
@@ -168,7 +162,15 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                         className="flex-grow p-2 border rounded focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-800"
                         placeholder="Type your message..."
                         disabled={isLoading}
+                        ref={inputRef}
                     />
+                    <button
+                        type="button"
+                        onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                        className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
+                    >
+                        😊
+                    </button>
                     <button
                         type="submit"
                         className={`px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -177,6 +179,11 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                         {isLoading ? 'Sending...' : 'Send'}
                     </button>
                 </div>
+                {showEmojiPicker && (
+                    <div className="mt-2">
+                        <EmojiPicker onEmojiClick={handleEmojiClick} />
+                    </div>
+                )}
             </form>
         </div>
     );

@@ -8,8 +8,9 @@ export async function POST(request: Request) {
     const user = await db.getUser(userId);
 
     if (user) {
-        const cookieStore = await cookies();
-        cookieStore.set('userId', userId);
+      const cookieStore = await cookies();
+      cookieStore.set('userId', userId);
+      await db.addLog(userId, `logged in`);
       return NextResponse.json({ success: true });
     } else {
       return NextResponse.json({ success: false }, { status: 401 });
