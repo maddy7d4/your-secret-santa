@@ -2,19 +2,17 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { Message } from '@/lib/db';
 import EmojiPicker from 'emoji-picker-react';
 
-type SanitizedMessage = {
-  id: string;
-  content: string;
-  timestamp: number;
-  isFromUser: boolean;
+type Message = {
+    id: string;
+    content: string;
+    senderId: string;
+    timestamp: number;
 };
 
-
 export default function ChatInterface({ userId, user }: { userId: string, user: any }) {
-  const [messages, setMessages] = useState<SanitizedMessage[]>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
@@ -70,7 +68,7 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
         try {
             const response = await fetch('/api/messages');
             if (response.ok) {
-                  const data: SanitizedMessage[] = await response.json();
+                const data = await response.json();
                 setMessages(data); // Assuming messages are returned in reverse order
             } else {
                 console.error('Failed to fetch messages');
@@ -96,10 +94,8 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                 if(!isUserAtBottom){
                     scrollToBottom()
                 }
-                const data = await response.json();
-                setMessages(prevMessages => [data.message, ...prevMessages]);
                 setNewMessage(''); // Clear the message input
-                // await fetchMessages();  // Re-fetch messages to include the new one
+                await fetchMessages();  // Re-fetch messages to include the new one
             } else {
                 console.error('Failed to send message');
             }
@@ -141,7 +137,7 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                         <div className="flex flex-col gap-2 px-2">
                             <div
                                 key={Math.random()} // Ensure you use a unique identifier
-                                className={`p-3 rounded-lg ${message.isFromUser
+                                className={`p-3 rounded-lg ${message.senderId === userId
                                     ? 'bg-red-100 text-red-800 ml-auto' // Sender's messages align to the right
                                     : 'bg-green-100 text-green-800 mr-auto' // Receiver's messages align to the left
                                     } sm:max-w-[70%] max-w-full break-words whitespace-normal`}
