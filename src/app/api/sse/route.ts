@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { db } from '@/lib/db';
-
-let clients = new Set<ReadableStreamDefaultController<string>>();
+import { addClient, removeClient } from '@/lib/notifications';
 
 export async function GET() {
     const cookieStore = await cookies();
@@ -18,11 +17,11 @@ export async function GET() {
 
     const stream = new ReadableStream<string>({
         start(controller) {
-            clients.add(controller);
+            addClient(controller);
             controller.enqueue('data: connected\n\n');
         },
         cancel(controller) {
-            clients.delete(controller);
+            removeClient(controller);
         },
     });
 
@@ -32,12 +31,6 @@ export async function GET() {
             'Cache-Control': 'no-cache',
             'Connection': 'keep-alive',
         },
-    });
-}
-
-export async function notifyClients(message: string) {
-    clients.forEach(client => {
-        client.enqueue(`data: ${JSON.stringify(message)}\n\n`);
     });
 }
 

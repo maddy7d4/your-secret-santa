@@ -1,6 +1,6 @@
 import { getDb } from './mongodb';
 import { ObjectId } from 'mongodb';
-import { notifyClients } from '../app/api/sse/route';
+import { notifyClients } from './notifications';
 
 export type User = {
     _id?: ObjectId;
