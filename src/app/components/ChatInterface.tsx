@@ -134,7 +134,7 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
         setShowEmojiPicker(false);
         inputRef.current?.focus();
     };
-    console.log("messages ----->", messages)
+    // console.log("messages ----->", messages)
 
     return (
         <div className="bg-white shadow-xl rounded-lg overflow-hidden flex flex-col h-[80vh]">
