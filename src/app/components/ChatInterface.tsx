@@ -18,6 +18,7 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const [isUserAtBottom, setIsUserAtBottom] = useState(true);
+    const [hasNewMessages, setHasNewMessages] = useState(false);
 
 
 
@@ -74,7 +75,21 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
             console.error('Error fetching messages:', error);
         }
     };
+    useEffect(() => {
+        const eventSource = new EventSource('/api/sse');
 
+        eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'newMessage' && data.receiverId === userId) {
+                setHasNewMessages(true);
+                fetchMessages();
+            }
+        };
+
+        return () => {
+            eventSource.close();
+        };
+    }, [userId, fetchMessages]);
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!newMessage.trim() || isLoading) return;

@@ -1,5 +1,6 @@
 import { getDb } from './mongodb';
 import { ObjectId } from 'mongodb';
+import { notifyClients } from '../app/api/sse/route';
 
 export type User = {
     _id?: ObjectId;
@@ -26,7 +27,17 @@ export class DB {
     async addMessage(message: Message): Promise<void> {
         const db = await getDb();
         await db.collection<Message>('messages').insertOne(message);
+
+
+        // Send notification
+        await notifyClients(JSON.stringify({
+            type: 'newMessage',
+            senderId: message.senderId,
+            receiverId: message.receiverId,
+        }));
     }
+
+    
 
     async getMessages(userId: string, partnerId: string, page: number = 1, pageSize: number = 50): Promise<Message[]> {
         const db = await getDb();
