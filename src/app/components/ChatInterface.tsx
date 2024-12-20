@@ -169,8 +169,8 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                         className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
                     >
-                        😊 */}
-                    </button>
+                        😊
+                    </button> */}
                     <button
                         type="submit"
                         className={`px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
