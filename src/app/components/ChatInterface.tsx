@@ -70,7 +70,7 @@ export default function ChatInterface({ userId, user }: { userId: string, user: 
             const response = await fetch('/api/messages');
             if (response.ok) {
                 const data = await response.json();
-                const decoded = data.map((message: any) => ({ ...message, receiverId: decrypt(message.receiverId) }));
+                const decoded = data.map((message: any) => ({ ...message, senderId: decrypt(message.senderId) ,receiverId: decrypt(message.receiverId) }));
                 data.receiverId = decoded;
                 setMessages(data);
             } else {

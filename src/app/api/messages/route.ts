@@ -24,6 +24,7 @@ export async function GET() {
 
         const messages = await db.getMessages(userId, user.partnerId);
         messages.forEach((message) => (message.receiverId = encrypt(message.receiverId)));
+        messages.forEach((message) => (message.senderId = encrypt(message.senderId)));
         return NextResponse.json(messages.reverse());
     } catch (error) {
         console.error('Error fetching messages:', error);
